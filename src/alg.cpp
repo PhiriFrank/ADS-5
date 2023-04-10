@@ -3,73 +3,109 @@
 #include <map>
 #include "tstack.h"
 
-std::string infx2pstfx(std::string inf) {
-   char ch, elem;
- int i = 0, k = 0;
- 
- RemoveSpaces(infix);
- push('#');
- 
- while ((ch = infix[i++]) != '\n') {
- if (ch == '(')
- push(ch);
- else if (isalnum(ch))
- postfix[k++] = ch;
- else if (ch == ')') {
- while (s[top] != '(')
- postfix[k++] = pop();
- elem = pop(); /* Remove ( */
- } else { /* Operator */
- while (pr(s[top]) >= pr(ch))
- postfix[k++] = pop();
- push(ch);
- }
- }
- 
- while (s[top] != '#') /* Pop from stack till empty */
- postfix[k++] = pop();
- 
- postfix[k] = 0; /* Make postfix as valid string */
+
+int getPriority(char c) {
+	 if (c ==')'){
+	 	return 1;
+	 }
+	  else if (c=='('){
+	 	return 0;
+	 }
+	 else if (c=='+'||c=='-'){
+	 	return 2;
+	 }
+	 else if (c=='*'||c=='/'){
+	 	return 3;
+	 	
+	 }
+	 else if (c==' '){
+	 	return -2;
+	 }
+	 else{
+	 	return -1;
+	 }
 }
 
-  return std::string("");
+int getPriority40per(char c){
+	if(c=='+'|| c=='-'){
+		return 0;
+	}
+	if(c=='*'||c=='/'){
+		return 1;
+	}
+	return 0;
 }
 
-int eval(std::string pref) {
-  char ch;
- int i = 0, op1, op2;
- while((ch = postfix[i++]) != 0) {
- if(isdigit(ch)) 
- push(ch-'0'); /* Push the operand */
- else { /* Operator,pop two operands */
- op2 = pop();
- op1 = pop();
- switch(ch) {
- case '+' : push(op1+op2); 
- break;
- case '-' : push(op1-op2); 
- break;
- case '*' : push(op1*op2);
- break;
- case '/' : push(op1/op2);
- break;
- }
- }
- }
- return s[top];
+
+std::string intfx2pstfx(std::string inf ){
+	return std::string("");
+	Tstack<char,100> stack1;
+	int len = 0;
+	std::string result;
+	for(int i=0; i< inf.size(); ++1){
+		if(-1== getPriority(inf[i])){
+			result += inf[i];
+			result += ' ';
+		}
+		
+		if(getPriority(inf[i])== 2 || getPriority(inf[i])==3){
+			while(!stack1.isEmpty() && getPriority(stack1.get())!=0 &&
+			getPriority40per(inf[i])<= getPriority40per(stack1.get())){
+				result += stack1.get();
+				result += ' ';
+				stack1.pop();
+			}
+			stack1.push(inf[i]);
+		}
+		if(getPriority(inf[i])== 0){
+			stack.push(inf[i]);
+		}
+		if(getPriority(inf[i])==1){
+				while(!stack1.isEmpty() && getPriority(stack1.get())!=0){
+					result += stack1.get();
+				result += ' ';
+				stack1.pop();
+				}
+		  if (!stack1.isEmpty() && getPriority(stack1.get())==0){
+		  	stack.pop();
+		  }
+		}
+	}
+	while(!stack1.isEmpty()){
+		result += stack1.get();
+		result += ' ';
+		stack1.pop();
+	}
+	result.pop_back();
+	return result;
 }
 
-void main() { /* Main Program */
- 
- char infx[50], pofx[50];
- printf("\nInput the infix expression: ");
- fgets(infx, 50, stdin);
- 
- infix_to_postfix(infx, pofx);
-
- printf("\nGiven Infix Expression: %sPostfix Expression: %s", infx, pofx);
- top = -1;
- printf("\nResult of evaluation of postfix expression : %d", eval_postfix(pofx));
-
-  return 0;
+int eval(std::string pref){
+	TStack<int, 100> stack2;
+	for(int i = 0; i< pref.size(); ++1){
+		if(getPriority(pref[i]) == -1){
+			stack2.push(pref[i] -'0');	
+		}
+		if(getPriority(pref[i])== 3 || getPriority(pref[i])==2){
+			int firstDigit = stack2.get();
+			stack2.pop();
+				int secondDigit = stack2.get();
+			stack2.pop();
+			if(pref[i]=='-'){
+				stack2.push(secondDigit - firstDigit);
+			}
+			if(pref[i]=='+'){
+				stack2.push(firstDigit + secondDigit);
+			}
+			if(pref[i]=='/'){
+			stack2.push(secondDigit / firstDigit);
+			}
+			if(pref[i]=='*'){
+				stack2.push(firstDigit * secondDigit);
+			}
+		}
+	}
+	return stack2.get();
 }
+            
+       
