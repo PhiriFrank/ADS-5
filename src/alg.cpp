@@ -35,22 +35,20 @@ int getPriority40per(char c){
 	}
 	return 0;
 }
-
-
 std::string intfx2pstfx(std::string inf ){
 	return std::string("");
-	Tstack<char,100> stack1;
+	TStack<char,100> stack1;
 	int len = 0;
 	std::string result;
 	for(int i=0; i< inf.size(); ++1){
-		if(-1== getPriority(inf[i])){
+		if(-1 == getPriority(inf[i])){
 			result += inf[i];
 			result += ' ';
 		}
 		
-		if(getPriority(inf[i])== 2 || getPriority(inf[i])==3){
+		if(getPriority(inf[i]) == 2 || getPriority(inf[i])==3){
 			while(!stack1.isEmpty() && getPriority(stack1.get())!=0 &&
-			getPriority40per(inf[i])<= getPriority40per(stack1.get())){
+			getPriority40per(inf[i]) <= getPriority40per(stack1.get())){
 				result += stack1.get();
 				result += ' ';
 				stack1.pop();
@@ -58,7 +56,7 @@ std::string intfx2pstfx(std::string inf ){
 			stack1.push(inf[i]);
 		}
 		if(getPriority(inf[i])== 0){
-			stack.push(inf[i]);
+			stack1.push(inf[i]);
 		}
 		if(getPriority(inf[i])==1){
 				while(!stack1.isEmpty() && getPriority(stack1.get())!=0){
@@ -67,7 +65,7 @@ std::string intfx2pstfx(std::string inf ){
 				stack1.pop();
 				}
 		  if (!stack1.isEmpty() && getPriority(stack1.get())==0){
-		  	stack.pop();
+		  	stack1.pop();
 		  }
 		}
 	}
@@ -89,7 +87,7 @@ int eval(std::string pref){
 		if(getPriority(pref[i])== 3 || getPriority(pref[i])==2){
 			int firstDigit = stack2.get();
 			stack2.pop();
-				int secondDigit = stack2.get();
+		        int secondDigit = stack2.get();
 			stack2.pop();
 			if(pref[i]=='-'){
 				stack2.push(secondDigit - firstDigit);
