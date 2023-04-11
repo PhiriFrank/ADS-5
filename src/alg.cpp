@@ -4,7 +4,6 @@
 #include <map>
 #include <string>
 #include "tstack.h"
-
 int getPriority(char c) {
 	if (c == ')') {
 		return 1;
@@ -17,7 +16,6 @@ int getPriority(char c) {
 	}
 	else if (c == '*' || c == '/') {
 		return 3;
-
 	}
 	else if (c == ' ') {
 		return -2;
@@ -26,7 +24,6 @@ int getPriority(char c) {
 		return -1;
 	}
 }
-
 int getPriority40per(char c) {
 	if (c == '+' || c == '-') {
 		return 0;
