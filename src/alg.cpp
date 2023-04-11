@@ -31,7 +31,7 @@ int getPriority40per(char c) {
 	}
 	return 0;
 }
-std::string intfx2pstfx(std::string inf) {
+std::string infx2pstfx(std::string inf) {
 	return std::string("");
 	TStack<char, 100> stack1;
 	int len = 0;
